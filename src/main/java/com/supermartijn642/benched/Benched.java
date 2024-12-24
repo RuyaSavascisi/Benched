@@ -3,15 +3,17 @@ package com.supermartijn642.benched;
 import com.supermartijn642.benched.blocks.BenchBlockEntity;
 import com.supermartijn642.benched.generators.*;
 import com.supermartijn642.benched.seat.SeatEntity;
+import com.supermartijn642.core.CommonUtils;
 import com.supermartijn642.core.block.BaseBlock;
 import com.supermartijn642.core.block.BaseBlockEntityType;
 import com.supermartijn642.core.registry.GeneratorRegistrationHandler;
 import com.supermartijn642.core.registry.RegistrationHandler;
 import com.supermartijn642.core.registry.RegistryEntryAcceptor;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
@@ -32,7 +34,8 @@ public class Benched {
         BenchedConfig.init();
 
         register();
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BenchedClient::register);
+        if(CommonUtils.getEnvironmentSide().isClient())
+            BenchedClient.register();
         registerGenerators();
     }
 
@@ -49,7 +52,12 @@ public class Benched {
             return BaseBlockEntityType.create(BenchBlockEntity::new, blocks);
         });
         // Seat entity
-        handler.registerEntityType("seat_entity", () -> EntityType.Builder.of((type, level) -> new SeatEntity(level), MobCategory.MISC).build(""));
+        handler.registerEntityType(
+            "seat_entity",
+            () -> EntityType.Builder.of((type, level) -> new SeatEntity(level), MobCategory.MISC)
+                .sized(0, 0)
+                .build(ResourceKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("benched", "seat_entity")))
+        );
     }
 
     private static void registerGenerators(){
