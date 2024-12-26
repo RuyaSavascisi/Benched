@@ -5,8 +5,8 @@ import com.supermartijn642.core.render.CustomBlockEntityRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -22,6 +22,7 @@ import java.util.Random;
 public class BenchBlockEntityRenderer implements CustomBlockEntityRenderer<BenchBlockEntity> {
 
     private static final Random RANDOM = new Random();
+    private static final ItemStackRenderState ITEM_RENDER_STATE = new ItemStackRenderState();
 
     @Override
     public void render(BenchBlockEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay){
@@ -53,9 +54,7 @@ public class BenchBlockEntityRenderer implements CustomBlockEntityRenderer<Bench
             poseStack.mulPose(new Quaternionf().setAngleAxis(RANDOM.nextDouble() * Math.PI * 2, 0, 0, 1));
             poseStack.translate(0, -0.1, 0);
 
-
-            BakedModel model = renderer.getModel(stack, entity.getLevel(), null, 0);
-            renderer.render(stack, ItemDisplayContext.GROUND, false, poseStack, bufferSource, combinedLight, OverlayTexture.NO_OVERLAY, model);
+            renderer.renderStatic(stack, ItemDisplayContext.GROUND, combinedLight, OverlayTexture.NO_OVERLAY, poseStack, bufferSource, entity.getLevel(), (int)pos.asLong() + i);
 
             poseStack.popPose();
 
