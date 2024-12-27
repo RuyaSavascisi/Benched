@@ -64,6 +64,7 @@ public class Benched {
         GeneratorRegistrationHandler handler = GeneratorRegistrationHandler.get("benched");
         handler.addGenerator(BenchedModelGenerator::new);
         handler.addGenerator(BenchedBlockStateGenerator::new);
+        handler.addGenerator(BenchedItemInfoGenerator::new);
         handler.addGenerator(BenchedLanguageGenerator::new);
         handler.addGenerator(BenchedLootTableGenerator::new);
         handler.addGenerator(BenchedRecipeGenerator::new);

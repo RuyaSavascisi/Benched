@@ -1,0 +1,6 @@
+{
+  "model": {
+    "model": "benched:item/bench",
+    "type": "minecraft:model"
+  }
+}
